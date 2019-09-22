@@ -1,0 +1,1 @@
+("~/work/snucomp/" "~/.emacs.d/" "~/work/pa192/" "/mnt/e/models/" "~/snucomp/")
