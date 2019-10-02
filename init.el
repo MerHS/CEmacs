@@ -24,7 +24,8 @@
 (require 'setup-cedet)
 (require 'setup-editing)
 
-
+(when (string= system-type "darwin")
+  (setq dired-use-ls-dired nil))
 
 ;; function-args
 ;; (require 'function-args)
@@ -413,8 +414,8 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 (require 'multiple-cursors)
 (global-set-key (kbd "M-s m") 'mc/edit-lines)
 
-(set-frame-parameter (selected-frame) 'alpha '(85 . 50))
-(add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+(set-frame-parameter (selected-frame) 'alpha '(93 . 85))
+(add-to-list 'default-frame-alist '(alpha . (93 . 85)))
 
 (require 'redo+)
 (global-set-key (kbd "C-x C-_") 'redo)
@@ -430,7 +431,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
-(push "/home/starvessel/.opam/4.02.3/share/emacs/site-lisp" load-path)
+(push "/Users/kinetc/.opam/4.02.3/share/emacs/site-lisp" load-path)
 (autoload 'merlin-mode "merlin" "Merlin mode" t)
 (add-hook 'tuareg-mode-hook 'merlin-mode)
 (add-hook 'caml-mode-hook 'merlin-mode)
