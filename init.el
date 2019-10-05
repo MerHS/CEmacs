@@ -237,7 +237,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 
 (provide 'fira-code-mode)
 
-(add-to-list 'default-frame-alist '(font . "Fira Code-9"))
+(add-to-list 'default-frame-alist '(font . "Fira Code-10"))
 
 ; Company Mode
 (require 'req-package)
@@ -414,8 +414,8 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 (require 'multiple-cursors)
 (global-set-key (kbd "M-s m") 'mc/edit-lines)
 
-(set-frame-parameter (selected-frame) 'alpha '(93 . 85))
-(add-to-list 'default-frame-alist '(alpha . (93 . 85)))
+(set-frame-parameter (selected-frame) 'alpha '(91 . 85))
+(add-to-list 'default-frame-alist '(alpha . (91 . 85)))
 
 (require 'redo+)
 (global-set-key (kbd "C-x C-_") 'redo)
@@ -438,3 +438,54 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 
 (setq-default truncate-lines 1)
 
+(add-hook 'prog-mode-hook 'electric-pair-mode)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
+(global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
+
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-method 'character)
+
+;; use only one desktop
+(setq desktop-path '("~/.emacs.d/"))
+(setq desktop-dirname "~/.emacs.d/")
+(setq desktop-base-file-name "emacs-desktop")
+
+;; remove desktop after it's been read
+(add-hook 'desktop-after-read-hook
+	  '(lambda ()
+	     ;; desktop-remove clears desktop-dirname
+	     (setq desktop-dirname-tmp desktop-dirname)
+	     (desktop-remove)
+	     (setq desktop-dirname desktop-dirname-tmp)))
+
+(defun saved-session ()
+  (file-exists-p (concat desktop-dirname "/" desktop-base-file-name)))
+
+;; use session-restore to restore the desktop manually
+(defun session-restore ()
+  "Restore a saved emacs session."
+  (interactive)
+  (if (saved-session)
+      (desktop-read)
+    (message "No desktop found.")))
+
+;; use session-save to save the desktop manually
+(defun session-save ()
+  "Save an emacs session."
+  (interactive)
+  (if (saved-session)
+      (if (y-or-n-p "Overwrite existing desktop? ")
+	  (desktop-save-in-desktop-dir)
+	(message "Session not saved."))
+  (desktop-save-in-desktop-dir)))
+
+;; ask user whether to restore desktop at start-up
+(add-hook 'after-init-hook
+	  '(lambda ()
+	     (if (saved-session)
+		 (if (y-or-n-p "Restore desktop? ")
+		     (session-restore)))))
