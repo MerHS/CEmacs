@@ -24,7 +24,8 @@
 (require 'setup-cedet)
 (require 'setup-editing)
 
-
+(when (string= system-type "darwin")
+  (setq dired-use-ls-dired nil))
 
 ;; function-args
 ;; (require 'function-args)
@@ -236,7 +237,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 
 (provide 'fira-code-mode)
 
-(add-to-list 'default-frame-alist '(font . "Fira Code-9"))
+(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10"))
 
 ; Company Mode
 (require 'req-package)
@@ -403,7 +404,8 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 ;; (eval-after-load 'flycheck
 ;;   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
-(global-display-line-numbers-mode)
+(when (version <= "26.0.50" emacs-version)
+  (global-display-line-numbers-mode))
 (global-set-key (kbd "C-\\") 'set-mark-command)
 (global-set-key (kbd "<f5>") (lambda ()
                                (interactive)
@@ -413,8 +415,8 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 (require 'multiple-cursors)
 (global-set-key (kbd "M-s m") 'mc/edit-lines)
 
-(set-frame-parameter (selected-frame) 'alpha '(85 . 50))
-(add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+(set-frame-parameter (selected-frame) 'alpha '(91 . 85))
+(add-to-list 'default-frame-alist '(alpha . (91 . 85)))
 
 (require 'redo+)
 (global-set-key (kbd "C-x C-_") 'redo)
@@ -430,10 +432,61 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
-(push "/home/starvessel/.opam/4.02.3/share/emacs/site-lisp" load-path)
+(push "/Users/kinetc/.opam/4.02.3/share/emacs/site-lisp" load-path)
 (autoload 'merlin-mode "merlin" "Merlin mode" t)
 (add-hook 'tuareg-mode-hook 'merlin-mode)
 (add-hook 'caml-mode-hook 'merlin-mode)
 
 (setq-default truncate-lines 1)
 
+(add-hook 'prog-mode-hook 'electric-pair-mode)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
+(global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
+
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-method 'character)
+
+;; use only one desktop
+(setq desktop-path '("~/.emacs.d/"))
+(setq desktop-dirname "~/.emacs.d/")
+(setq desktop-base-file-name "emacs-desktop")
+
+;; remove desktop after it's been read
+(add-hook 'desktop-after-read-hook
+	  '(lambda ()
+	     ;; desktop-remove clears desktop-dirname
+	     (setq desktop-dirname-tmp desktop-dirname)
+	     (desktop-remove)
+	     (setq desktop-dirname desktop-dirname-tmp)))
+
+(defun saved-session ()
+  (file-exists-p (concat desktop-dirname "/" desktop-base-file-name)))
+
+;; use session-restore to restore the desktop manually
+(defun session-restore ()
+  "Restore a saved emacs session."
+  (interactive)
+  (if (saved-session)
+      (desktop-read)
+    (message "No desktop found.")))
+
+;; use session-save to save the desktop manually
+(defun session-save ()
+  "Save an emacs session."
+  (interactive)
+  (if (saved-session)
+      (if (y-or-n-p "Overwrite existing desktop? ")
+	  (desktop-save-in-desktop-dir)
+	(message "Session not saved."))
+  (desktop-save-in-desktop-dir)))
+
+;; ask user whether to restore desktop at start-up
+(add-hook 'after-init-hook
+	  '(lambda ()
+	     (if (saved-session)
+		 (if (y-or-n-p "Restore desktop? ")
+		     (session-restore)))))
