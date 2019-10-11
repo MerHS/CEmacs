@@ -237,8 +237,6 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 
 (provide 'fira-code-mode)
 
-(add-to-list 'default-frame-alist '(font . "Fira Code-9"))
-
 ; Company Mode
 (require 'req-package)
 
@@ -415,9 +413,6 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 (require 'multiple-cursors)
 (global-set-key (kbd "M-s m") 'mc/edit-lines)
 
-(set-frame-parameter (selected-frame) 'alpha '(91 . 85))
-(add-to-list 'default-frame-alist '(alpha . (91 . 85)))
-
 (require 'redo+)
 (global-set-key (kbd "C-x C-_") 'redo)
 
@@ -505,3 +500,5 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 	     (if (saved-session)
 		 (if (y-or-n-p "Restore desktop? ")
 		     (session-restore)))))
+
+(load "~/.emacs.d/machine_only.el")
