@@ -237,7 +237,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 
 (provide 'fira-code-mode)
 
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10"))
+(add-to-list 'default-frame-alist '(font . "Fira Code-9"))
 
 ; Company Mode
 (require 'req-package)
@@ -404,7 +404,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 ;; (eval-after-load 'flycheck
 ;;   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
-(when (version <= "26.0.50" emacs-version)
+(when (version<= "26.0.50" emacs-version)
   (global-display-line-numbers-mode))
 (global-set-key (kbd "C-\\") 'set-mark-command)
 (global-set-key (kbd "<f5>") (lambda ()
