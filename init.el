@@ -237,7 +237,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 
 (provide 'fira-code-mode)
 
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10"))
+(add-to-list 'default-frame-alist '(font . "Fira Code-9"))
 
 ; Company Mode
 (require 'req-package)
@@ -404,7 +404,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 ;; (eval-after-load 'flycheck
 ;;   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
-(when (version <= "26.0.50" emacs-version)
+(when (version<= "26.0.50" emacs-version)
   (global-display-line-numbers-mode))
 (global-set-key (kbd "C-\\") 'set-mark-command)
 (global-set-key (kbd "<f5>") (lambda ()
@@ -444,8 +444,23 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 (global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
 (global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
 
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
+(use-package dired-sidebar
+  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+  :ensure t
+  :commands (dired-sidebar-toggle-sidebar)
+  :init
+  (add-hook 'dired-sidebar-mode-hook
+            (lambda ()
+              (unless (file-remote-p default-directory)
+                (auto-revert-mode))))
+  :config
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+
+  (setq dired-sidebar-subtree-line-prefix "__")
+  (setq dired-sidebar-theme 'vscode)
+  (setq dired-sidebar-use-term-integration t)
+  (setq dired-sidebar-use-custom-font t))
 
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 (setq highlight-indent-guides-method 'character)

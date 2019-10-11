@@ -7,13 +7,9 @@
         c-electric-paren
         c-electric-pound
         c-electric-semi&comma
+        c-electric-slash
         c-electric-star
         crux-move-beginning-of-line
         easy-kill
         ))
 
-(setq mc/cmds-to-run-once
-      '(
-        c-electric-lt-gt
-        helm-M-x
-        ))
