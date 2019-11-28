@@ -410,6 +410,11 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
                                (setq-local compilation-read-command nil)
                                (call-interactively 'compile)))
 
+(require 'company-tabnine)
+(add-to-list 'company-backends #'conmpany-tabnine)
+(setq company-idle-delay 0)
+(setq company-show-numbers t)
+
 (require 'multiple-cursors)
 (global-set-key (kbd "M-s m") 'mc/edit-lines)
 
@@ -427,7 +432,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
-(push "/Users/kinetc/.opam/4.02.3/share/emacs/site-lisp" load-path)
+(push "/home/kinetc/.opam/4.02.3/share/emacs/site-lisp" load-path)
 (autoload 'merlin-mode "merlin" "Merlin mode" t)
 (add-hook 'tuareg-mode-hook 'merlin-mode)
 (add-hook 'caml-mode-hook 'merlin-mode)
@@ -501,4 +506,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 		 (if (y-or-n-p "Restore desktop? ")
 		     (session-restore)))))
 
+
+(use-package company-tabnine :ensure t)
+(require 'company-tabnine)
 (load "~/.emacs.d/machine_only.el")
