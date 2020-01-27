@@ -1,1 +1,0 @@
-("~/.emacs.d/" "~/work/CC19FS.Team3/" "~/work/snucomp/")

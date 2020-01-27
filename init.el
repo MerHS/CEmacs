@@ -427,7 +427,7 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
-(push "/Users/kinetc/.opam/4.02.3/share/emacs/site-lisp" load-path)
+(push "/home/kinetc/.opam/4.02.3/share/emacs/site-lisp" load-path)
 (autoload 'merlin-mode "merlin" "Merlin mode" t)
 (add-hook 'tuareg-mode-hook 'merlin-mode)
 (add-hook 'caml-mode-hook 'merlin-mode)
@@ -500,5 +500,43 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
 	     (if (saved-session)
 		 (if (y-or-n-p "Restore desktop? ")
 		     (session-restore)))))
+
+(require 'rust-mode)
+(add-hook 'rust-mode-hook
+          (lambda () (setq indent-tabs-mode nil)))
+(setq rust-format-on-save t)
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
+
+(add-hook 'coq-mode-hook #'company-coq-mode)
+
+(require 'haskell-interactive-mode)
+(require 'haskell-process)
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+
+(custom-set-variables
+ '(haskell-process-suggest-remove-import-lines t)
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t))
+
+(custom-set-variables '(haskell-stylish-on-save t))
+
+(define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def)
+(define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+(define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
+(define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
+(define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
+(define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
+(define-key haskell-mode-map (kbd "C-c C-n C-k") 'haskell-interactive-mode-clear)
+(define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)
+(custom-set-variables
+ '(haskell-tags-on-save t))
+
+(require 'haskell-mode)
+(define-key haskell-mode-map (kbd "C-c h") 'haskell-hoogle)
+;(setq haskell-hoogle-command "hoogle")')')
 
 (load "~/.emacs.d/machine_only.el")
